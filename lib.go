@@ -21,13 +21,17 @@ func ValidateResponse(resp []byte) (CommonMessage, error) {
 
 	switch response.Response.Result.Code {
 	case "00000002":
-		return CommonMessage{}, Err002
+		err := errors.New(Err002.Error() + response.Response.Result.Message)
+		return CommonMessage{}, err
 	case "00000004":
-		return CommonMessage{}, Err004
+		err := errors.New(Err004.Error() + response.Response.Result.Message)
+		return CommonMessage{}, err
 	case "00000007":
-		return CommonMessage{}, Err007
+		err := errors.New(Err007.Error() + response.Response.Result.Message)
+		return CommonMessage{}, err
 	case "00000008":
-		return CommonMessage{}, Err008
+		err := errors.New(Err008.Error() + response.Response.Result.Message)
+		return CommonMessage{}, err
 	}
 
 	return response, nil
