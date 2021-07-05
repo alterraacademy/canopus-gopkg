@@ -32,6 +32,9 @@ func ValidateResponse(resp []byte) (CommonMessage, error) {
 	case "00000008":
 		err := errors.New(Err008.Error() + response.Response.Result.Message)
 		return CommonMessage{}, err
+	case "00000020":
+		err := errors.New(Err020.Error() + response.Response.Result.Message)
+		return CommonMessage{}, err
 	}
 
 	return response, nil

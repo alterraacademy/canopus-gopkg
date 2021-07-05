@@ -53,8 +53,8 @@ type CartPayload struct {
 	CartDetails struct {
 		ID      string `json:"id" validate:"required"`
 		Payment struct {
-			Key  string `json:"key"`
-			Type string `json:"type"`
+			Key  string `json:"key,omitempty"`
+			Type string `json:"type,omitempty"`
 		} `json:"payment"`
 		Amount    float64 `json:"amount" validate:"required"`
 		Title     string  `json:"title" validate:"required"`
@@ -64,40 +64,34 @@ type CartPayload struct {
 	ItemDetails     []CartPayloadItemDetail `json:"itemDetails" validate:"required"`
 	CustomerDetails struct {
 		FirstName      string `json:"firstName" validate:"required"`
-		LastName       string `json:"lastName"`
+		LastName       string `json:"lastName,omitempty"`
 		Email          string `json:"email" validate:"required"`
 		Phone          string `json:"phone" validate:"required"`
 		BillingAddress struct {
-			FirstName  string `json:"firstName"`
-			LastName   string `json:"lastName"`
-			Phone      string `json:"phone"`
-			Address    string `json:"address"`
-			City       string `json:"city"`
-			PostalCode string `json:"postalCode"`
-		} `json:"billingAddress"`
+			FirstName  string `json:"firstName,omitempty"`
+			LastName   string `json:"lastName,omitempty"`
+			Phone      string `json:"phone,omitempty"`
+			Address    string `json:"address,omitempty"`
+			City       string `json:"city,omitempty"`
+			PostalCode string `json:"postalCode,omitempty"`
+		} `json:"billingAddress,omitempty"`
 		ShippingAddress struct {
-			FirstName  string `json:"firstName"`
-			LastName   string `json:"lastName"`
-			Phone      string `json:"phone"`
-			Address    string `json:"address"`
-			City       string `json:"city"`
-			PostalCode string `json:"postalCode"`
-		} `json:"shippingAddress"`
+			FirstName  string `json:"firstName,omitempty"`
+			LastName   string `json:"lastName,omitempty"`
+			Phone      string `json:"phone,omitempty"`
+			Address    string `json:"address,omitempty"`
+			City       string `json:"city,omitempty"`
+			PostalCode string `json:"postalCode,omitempty"`
+		} `json:"shippingAddress,omitempty"`
 	} `json:"customerDetails" validate:"required"`
-	Environment struct {
-		Agent   string `json:"agent"`
-		Mode    string `json:"mode"`
-		Os      string `json:"os"`
-		Version string `json:"version"`
-	} `json:"environment"`
 	URL struct {
 		ReturnURL       string `json:"returnURL" validate:"required"`
 		CancelURL       string `json:"cancelURL" validate:"required"`
 		NotificationURL string `json:"notificationURL" validate:"required"`
 	} `json:"url" validate:"required"`
 	ExtendInfo struct {
-		AdditionalPrefix string `json:"additionalPrefix"`
-	} `json:"extendInfo"`
+		AdditionalPrefix string `json:"additionalPrefix" validate:"required"`
+	} `json:"extendInfo" validate:"required"`
 }
 
 // CartPayloadItemDetail item cart detail
