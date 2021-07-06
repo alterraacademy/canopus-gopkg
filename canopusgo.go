@@ -229,7 +229,10 @@ func (cano *Canopus) GenerateCart(payload CartPayload, paymentMethod PaymentMeth
 	}
 
 	if cano.Token == "" {
-		cano.GetToken()
+		_, err := cano.GetToken()
+		if err != nil {
+			return CartResponse{}, err
+		}
 	}
 
 	req.Header.Add("Content-Type", "application/json")
@@ -245,6 +248,11 @@ func (cano *Canopus) GenerateCart(payload CartPayload, paymentMethod PaymentMeth
 		return CartResponse{}, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		errMsg := fmt.Sprintf("error http code: %v", resp.StatusCode)
+		return CartResponse{}, errors.New(errMsg)
+	}
 
 	respResult, err := ValidateResponse(response)
 	if err != nil {
