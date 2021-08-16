@@ -228,16 +228,14 @@ func (cano *Canopus) GenerateCart(payload CartPayload, paymentMethod PaymentMeth
 		return CartResponse{}, err
 	}
 
-	if cano.Token == "" {
-		_, err := cano.GetToken()
-		if err != nil {
-			return CartResponse{}, err
-		}
+	token, err := cano.GetToken()
+	if err != nil {
+		return CartResponse{}, err
 	}
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("X-Signature", signature)
-	req.Header.Add("authorization", "Bearer "+cano.Token)
+	req.Header.Add("authorization", "Bearer "+token)
 
 	resp, err := cano.Client.Do(req)
 	if err != nil {
