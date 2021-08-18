@@ -199,6 +199,7 @@ func (cano *Canopus) GetAvailableMethod(amount float64) ([]PaymentMethod, error)
 
 func (cano *Canopus) GenerateCart(payload CartPayload, paymentMethod PaymentMethod) (CartResponse, error) {
 	var url string
+	var response []byte
 
 	err := cano.Validator.Struct(payload)
 	if err != nil {
@@ -222,36 +223,32 @@ func (cano *Canopus) GenerateCart(payload CartPayload, paymentMethod PaymentMeth
 		return CartResponse{}, err
 	}
 
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(bodyJson))
-
+	resp, err := callCanopus(url, bodyJson, cano, signature)
 	if err != nil {
 		return CartResponse{}, err
 	}
 
-	token, err := cano.GetToken()
-	if err != nil {
-		return CartResponse{}, err
-	}
+	// token expired
+	if resp.StatusCode == 403 {
+		_, err := cano.GetToken()
 
-	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("X-Signature", signature)
-	req.Header.Add("authorization", "Bearer "+token)
-
-	resp, err := cano.Client.Do(req)
-	if err != nil {
-		return CartResponse{}, err
-	}
-	response, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return CartResponse{}, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != 200 {
+		if err != nil {
+			return CartResponse{}, err
+		}
+		resp, err = callCanopus(url, bodyJson, cano, signature)
+		if err != nil {
+			return CartResponse{}, err
+		}
+	} else if resp.StatusCode != 200 {
 		errMsg := fmt.Sprintf("error http code: %v", resp.StatusCode)
 		return CartResponse{}, errors.New(errMsg)
 	}
+	defer resp.Body.Close()
 
+	response, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return CartResponse{}, err
+	}
 	respResult, err := ValidateResponse(response)
 	if err != nil {
 		return CartResponse{}, err
@@ -282,4 +279,29 @@ func (cano *Canopus) GenerateCart(payload CartPayload, paymentMethod PaymentMeth
 	}
 
 	return result, nil
+}
+
+func callCanopus(url string, bodyJson []byte, cano *Canopus, signature string) (*http.Response, error) {
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(bodyJson))
+
+	if err != nil {
+		return nil, err
+	}
+
+	if cano.Token == "" {
+		_, err := cano.GetToken()
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("X-Signature", signature)
+	req.Header.Add("authorization", "Bearer "+cano.Token)
+
+	resp, err := cano.Client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
