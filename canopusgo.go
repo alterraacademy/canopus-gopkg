@@ -175,10 +175,10 @@ func (cano *Canopus) GetAvailableMethod(amount float64) ([]PaymentMethod, error)
 		return []PaymentMethod{}, err
 	}
 
-	_, err = VerifySignature(cano.MerchantPem, response, respResult.Signature)
-	if err != nil {
-		return []PaymentMethod{}, err
-	}
+	// _, err = VerifySignature(cano.MerchantPem, response, respResult.Signature)
+	// if err != nil {
+	// 	return []PaymentMethod{}, err
+	// }
 
 	var result []PaymentMethod
 	for _, payment := range respResult.Response.Data["method"].([]interface{}) {

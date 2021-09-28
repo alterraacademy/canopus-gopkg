@@ -19,22 +19,30 @@ func ValidateResponse(resp []byte) (CommonMessage, error) {
 		return CommonMessage{}, err
 	}
 
-	switch response.Response.Result.Code {
-	case "00000002":
-		err := errors.New(Err002.Error() + response.Response.Result.Message)
-		return CommonMessage{}, err
-	case "00000004":
-		err := errors.New(Err004.Error() + response.Response.Result.Message)
-		return CommonMessage{}, err
-	case "00000007":
-		err := errors.New(Err007.Error() + response.Response.Result.Message)
-		return CommonMessage{}, err
-	case "00000008":
-		err := errors.New(Err008.Error() + response.Response.Result.Message)
-		return CommonMessage{}, err
-	case "00000020":
-		err := errors.New(Err020.Error() + response.Response.Result.Message)
-		return CommonMessage{}, err
+	if response.Response.Result.Status == "ERROR" {
+		switch response.Response.Result.Code {
+		case "00000002":
+			err := errors.New(Err002.Error() + response.Response.Result.Message)
+			return CommonMessage{}, err
+		case "00000004":
+			err := errors.New(Err004.Error() + response.Response.Result.Message)
+			return CommonMessage{}, err
+		case "00000007":
+			err := errors.New(Err007.Error() + response.Response.Result.Message)
+			return CommonMessage{}, err
+		case "00000008":
+			err := errors.New(Err008.Error() + response.Response.Result.Message)
+			return CommonMessage{}, err
+		case "00000019":
+			err := errors.New(Err019.Error() + response.Response.Result.Message)
+			return CommonMessage{}, err
+		case "00000020":
+			err := errors.New(Err020.Error() + response.Response.Result.Message)
+			return CommonMessage{}, err
+		default:
+			err := errors.New(ErrUnknow.Error() + response.Response.Result.Message)
+			return CommonMessage{}, err
+		}
 	}
 
 	return response, nil

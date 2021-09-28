@@ -13,5 +13,7 @@ var (
 	Err004          = errors.New("parameter has illegal value, ")
 	Err007          = errors.New("signature is invalid, ")
 	Err008          = errors.New("payement method is not available, ")
+	Err019          = errors.New("payment method error, ")
 	Err020          = errors.New("duplicate order id, ")
+	ErrUnknow       = errors.New("unknown error, ")
 )
