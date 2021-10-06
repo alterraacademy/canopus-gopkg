@@ -261,6 +261,12 @@ func (cano *Canopus) GenerateCart(payload CartPayload, paymentMethod PaymentMeth
 	// }
 
 	var result CartResponse
+	if cano.Type == "snap" {
+		result.CartID = respResult.Response.Data["cartID"].(string)
+		result.PayTo = respResult.Response.Data["checkoutURL"].(string)
+		return result, nil
+	}
+
 	switch paymentMethod.Type {
 	case "op":
 		result.CartID = respResult.Response.Data["cartID"].(string)
