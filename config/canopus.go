@@ -95,15 +95,15 @@ func (e LogType) ToString() string {
 }
 
 var (
-	Environment    = Staging
-	DefaultAPIType = SNAP
-
+	Environment        = Staging
+	DefaultAPIType     = SNAP
 	DefaultHttpTimeout = time.Second * time.Duration(10)
-	DefaultHttpClient  = &http.Client{Timeout: DefaultHttpTimeout}
 	DefaultLogLevel    = 2
 	DefaultLogFormat   = "{\"log_type\":\"%s\",\"timestamp\":\"%s\",\"event\":\"%s\",\"detail\":\"%s\"}"
-	newLog             = log.New(os.Stdout, "", 0)
-	Logger             = func(logtype LogType, event string, detail interface{}) {
+
+	DefaultHttpClient = &http.Client{Timeout: DefaultHttpTimeout}
+	newLog            = log.New(os.Stdout, "", 0)
+	Logger            = func(logtype LogType, event string, detail interface{}) {
 		timestamp := time.Now().UTC().Format("2006-01-02 15:04:05")
 		var jsonFormat []byte
 		if logtype == Error {
