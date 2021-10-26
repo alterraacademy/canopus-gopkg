@@ -22,6 +22,7 @@ func GetAvailableMethod() {
 		MerchantPem: privPem,
 		MerchantID:  "M-0001",
 		Secret:      "yoursecret",
+		Timeout:     20,
 	})
 
 	res, err := canopusClient.GetAvailableMethod(10)

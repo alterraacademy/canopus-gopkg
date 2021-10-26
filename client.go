@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/alterraacademy/canopus-gopkg/config"
 	"github.com/alterraacademy/canopus-gopkg/helper"
@@ -22,6 +23,7 @@ type ConfigOptions struct {
 	MerchantPem []byte `validate:"required"`
 	MerchantID  string `validate:"required"`
 	Secret      string `validate:"required"`
+	Timeout     int
 }
 
 type Client struct {
@@ -37,6 +39,10 @@ func NewAPICLient(cano *ConfigOptions) ClientMethod {
 	err := validate.Struct(cano)
 	if err != nil {
 		return nil
+
+	}
+	if cano.Timeout != 0 {
+		config.DefaultHttpTimeout = time.Second * time.Duration(cano.Timeout)
 	}
 
 	client := &Client{

@@ -23,6 +23,7 @@ func CreateCart() {
 		MerchantPem: privPem,
 		MerchantID:  "M-0001",
 		Secret:      "yoursecret",
+		Timeout:     20,
 	})
 
 	var payload canopus.CartPayload

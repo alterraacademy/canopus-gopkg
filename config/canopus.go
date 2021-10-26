@@ -64,19 +64,8 @@ func (e APIType) ToString() string {
 	return "undefined"
 }
 
-var logLevel = map[LogType]int{
-	Error: 1,
-	Info:  2,
-	Debug: 3,
-}
-
 func (e LogType) CheckLevel() bool {
-	for k, v := range logLevel {
-		if k == e && v <= DefaultLogLevel {
-			return true
-		}
-	}
-	return false
+	return e <= LogType(DefaultLogLevel)
 }
 
 var logType = map[LogType]string{

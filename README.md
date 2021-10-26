@@ -52,6 +52,7 @@ canopusClient := canopus.NewAPICLient(&canopus.ConfigOptions{
 		MerchantPem: pem,
 		MerchantID:  "M-0001",
 		Secret:      "yoursupersecret",
+		Timeout:	 10
 	})
 ```
 
