@@ -3,9 +3,8 @@ package examples
 import (
 	"fmt"
 	"io/ioutil"
-	"time"
 
-	canopusgo "github.com/alterraacademy/canopus-gopkg"
+	"github.com/alterraacademy/canopus-gopkg"
 )
 
 func GetAvailableMethod() {
@@ -17,22 +16,15 @@ func GetAvailableMethod() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	timeout := time.Second * time.Duration(60)
 
-	cano, err := canopusgo.CreateService(canopusgo.InitService{
+	canopusClient := canopus.NewAPICLient(&canopus.ConfigOptions{
 		MerchantKey: privKey,
 		MerchantPem: privPem,
-		TimeOut:     timeout,
 		MerchantID:  "M-0001",
 		Secret:      "yoursecret",
+		Timeout:     20,
 	})
-	if err != nil {
-		fmt.Println(err)
-	}
 
-	res, err := cano.GetAvailableMethod(10000)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Printf("%+v\n", res)
+	res, err := canopusClient.GetAvailableMethod(10)
+	fmt.Printf("API Result : %+v\nError : %+v", res, err)
 }
