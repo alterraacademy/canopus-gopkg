@@ -165,6 +165,7 @@ func (c *Client) GenerateCart(payload CartPayload, paymentMethod PaymentMethod) 
 	respResult, err := c.callClient(http.MethodPost, url, bodyJson)
 	if err != nil {
 		config.Logger(config.Error, "generate cart - call client", err)
+		return CartResponse{}, err
 	}
 
 	var result CartResponse
