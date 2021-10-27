@@ -87,7 +87,7 @@ var (
 	Environment        = Staging
 	DefaultAPIType     = SNAP
 	DefaultHttpTimeout = time.Second * time.Duration(10)
-	DefaultLogLevel    = 2
+	DefaultLogLevel    = Info
 	DefaultLogFormat   = "{\"log_type\":\"%s\",\"timestamp\":\"%s\",\"event\":\"%s\",\"detail\":\"%s\"}"
 
 	DefaultHttpClient = &http.Client{Timeout: DefaultHttpTimeout}
