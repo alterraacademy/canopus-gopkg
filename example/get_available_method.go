@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/alterraacademy/canopus-gopkg"
+	canopus "github.com/alterraacademy/canopus-gopkg"
 )
 
 func GetAvailableMethod() {

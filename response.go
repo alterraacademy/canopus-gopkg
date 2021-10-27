@@ -1,4 +1,4 @@
-package canopus
+package canopusgo
 
 import (
 	"encoding/json"

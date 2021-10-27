@@ -1,4 +1,4 @@
-package canopus
+package canopusgo
 
 const (
 	PostTokenEndpoint    string = "%v/api/v1/merchants/%v/token"

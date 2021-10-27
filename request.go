@@ -1,4 +1,4 @@
-package canopus
+package canopusgo
 
 // CartPayload payload to create cart
 type CartPayload struct {

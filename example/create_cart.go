@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/alterraacademy/canopus-gopkg"
+	canopus "github.com/alterraacademy/canopus-gopkg"
 )
 
 func CreateCart() {
