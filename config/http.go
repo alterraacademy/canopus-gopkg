@@ -33,6 +33,9 @@ func (c *HttpClientImp) RequestDo(method string, url string, bodyJson []byte, to
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("X-Signature", signature)
 	req.Header.Add("Authorization", "Bearer "+token)
+	if Environment == Staging {
+		req.Header.Add("x-mock-ip", "127.0.0.1")
+	}
 
 	resp, err := c.HttpClient.Do(req)
 	if err != nil {
