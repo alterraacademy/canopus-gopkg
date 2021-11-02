@@ -106,7 +106,7 @@ var (
 			jsonFormat = []byte("Someting error.")
 		}
 		if logtype.CheckLevel() {
-			newLog.Printf(DefaultLogFormat, logtype.ToString(), timestamp, event, jsonFormat)
+			newLog.Printf(DefaultLogFormat, timestamp, logtype.ToString(), event, jsonFormat)
 		}
 	}
 )

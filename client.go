@@ -31,6 +31,7 @@ type Client struct {
 	HTTPClient config.HTTPClient
 	Token      string
 	Validator  *validator.Validate
+	reqLimit   int
 }
 
 func NewAPICLient(cano *ConfigOptions) ClientMethod {
@@ -49,6 +50,7 @@ func NewAPICLient(cano *ConfigOptions) ClientMethod {
 		Canopus:    cano,
 		HTTPClient: config.GetHTTPClient(),
 		Validator:  validate,
+		reqLimit:   3,
 	}
 	client.getToken()
 
@@ -70,7 +72,8 @@ func (c *Client) callClient(method, url string, bodyJSON []byte) (CommonMessage,
 	fullURL := fmt.Sprintf(url, config.Environment.BaseUrl(), c.Canopus.MerchantID)
 	result, err := c.HTTPClient.RequestDo(method, fullURL, bodyJSON, c.Token, signature)
 	if err != nil {
-		if strings.Contains(err.Error(), "token") {
+		if strings.Contains(err.Error(), "token") && c.reqLimit > 0 {
+			c.reqLimit -= 1
 			c.getToken()
 		}
 		config.Logger(config.Error, "call client - request http", err)
@@ -105,15 +108,14 @@ func (c *Client) getToken() {
 	respResult, err := c.callClient(http.MethodPost, PostTokenEndpoint, bodyJson)
 	if err != nil {
 		config.Logger(config.Error, "create token - call client", err)
+	} else {
+		token := respResult.Response.Data["token"].(string)
+		if token == "invalid" || len(token) <= 0 {
+			config.Logger(config.Error, "create token - invalid token", err)
+		}
+		// set new token to struct
+		c.Token = token
 	}
-
-	token := respResult.Response.Data["token"].(string)
-	if token == "invalid" || len(token) <= 0 {
-		config.Logger(config.Error, "create token - invalid token", err)
-	}
-
-	// set new token to struct
-	c.Token = token
 }
 
 // GetAvailableMethod Get all available method by merhantID
