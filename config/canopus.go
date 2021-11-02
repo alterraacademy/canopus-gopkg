@@ -88,19 +88,23 @@ var (
 	DefaultAPIType     = SNAP
 	DefaultHttpTimeout = time.Second * time.Duration(10)
 	DefaultLogLevel    = Info
-	DefaultLogFormat   = "{\"log_type\":\"%s\",\"timestamp\":\"%s\",\"event\":\"%s\",\"detail\":\"%s\"}"
+	DefaultLogFormat   = "{\"timestamp\":\"%s\",\"log_type\":\"%s\",\"event\":\"%s\",\"detail\":\"%s\"}"
 
 	DefaultHttpClient = &http.Client{Timeout: DefaultHttpTimeout}
 	newLog            = log.New(os.Stdout, "", 0)
 	Logger            = func(logtype LogType, event string, detail interface{}) {
 		timestamp := time.Now().UTC().Format("2006-01-02 15:04:05")
 		var jsonFormat []byte
-		if logtype == Error {
-			jsonFormat = []byte(detail.(error).Error())
-		} else {
+		switch v := detail.(type) {
+		case error:
+			jsonFormat = []byte(v.Error())
+		case string:
+			jsonFormat = []byte(v)
+		case map[string]interface{}:
 			jsonFormat, _ = json.Marshal(detail)
+		default:
+			jsonFormat = []byte("Someting error.")
 		}
-
 		if logtype.CheckLevel() {
 			newLog.Printf(DefaultLogFormat, logtype.ToString(), timestamp, event, jsonFormat)
 		}

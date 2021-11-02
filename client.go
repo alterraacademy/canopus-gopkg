@@ -59,7 +59,7 @@ func (c *Client) callClient(method, url string, bodyJSON []byte) (CommonMessage,
 
 	signature, err := helper.GenerateSignature(c.Canopus.MerchantKey, bodyJSON)
 	if err != nil {
-		config.Logger(config.Error, "call client - generate signature", err.Error())
+		config.Logger(config.Error, "call client - generate signature", err)
 		return CommonMessage{}, err
 	}
 
